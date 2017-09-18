@@ -55,7 +55,10 @@ class ShowList:
             print('-' * 35)
             for i,show in enumerate(self.shows):
                 print('{:<10}'.format(str(i+1)) + '{:<25}'.format(show.name))
-            delete = input("Enter show number to delete: ").strip()
+            delete = input("Enter show number to delete (C to cancel): ").strip()
+            if delete == 'c' or delete == 'C':
+                print("Delete Cancelled.")
+                return None
             if type(delete) != int:
                 try:
                     delete = int(delete) - 1
