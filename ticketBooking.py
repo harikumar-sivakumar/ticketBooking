@@ -13,7 +13,7 @@ class ShowList:
             print('\n' + '{:<20}'.format('Show Name') + '{:<9}'.format('Sold'))
             print('-' * 29)
             for show in self.shows:
-                print('{:<20}'.format(show.name) + '{:<4}'.format(str(show.capacity - show.availableSeats)))
+                show.soldDetails()
         else:
             print("No shows.")
 
@@ -22,13 +22,13 @@ class ShowList:
             print('\n' + '{:<10}'.format('Show No.') + '{:<25}'.format('Show Name') + '{:<15}'.format('Available Seats'))
             print('-' * 50)
             for i,show in enumerate(self.shows):
-                print('{:<10}'.format(str(i+1)) + '{:<25}'.format(show.name) + '{:<15}'.format(str(show.availableSeats)))
+                show.buyTicketsDetails(i)
 
             showSelected = input("Select show number: ").strip()
             try:
                 showSelected = int(showSelected) - 1
                 if showSelected not in range(0, len(self.shows)):
-                    raise ValueError('invalid input')
+                    raise ValueError('Invalid input')
             except:
                 print("Invalid input")
                 return None
@@ -54,7 +54,7 @@ class ShowList:
             print('\n' + '{:<10}'.format('Show No.') + '{:<25}'.format('Show Name'))
             print('-' * 35)
             for i,show in enumerate(self.shows):
-                print('{:<10}'.format(str(i+1)) + '{:<25}'.format(show.name))
+                show.delelteShowDetails(i)
             delete = input("Enter show number to delete (C to cancel): ").strip()
             if delete == 'c' or delete == 'C':
                 print("Delete Cancelled.")
@@ -85,6 +85,17 @@ class Show:
                 self.capacity = input("Invalid input. Enter capacity as a number: ")
         self.availableSeats = self.capacity
 
+    def buyTicketsDetails(self,i):
+        print('{:<10}'.format(str(i + 1)) + '{:<25}'.format(self.name) + '{:<15}'.format(str(self.availableSeats)))
+
+    def buyTickets(self):
+        pass
+
+    def soldDetails(self):
+        print('{:<20}'.format(self.name) + '{:<4}'.format(str(self.capacity - self.availableSeats)))
+
+    def deleteShowDetails(self,i):
+        print('{:<10}'.format(str(i+1)) + '{:<25}'.format(self.name))
 
 
 s = ShowList()
