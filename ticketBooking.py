@@ -18,13 +18,15 @@ class ShowList:
             print("No shows.")
 
     def buyTickets(self):
-        if len(s.shows) > 0:
+        if len(self.shows) > 0:
             print('\n' + '{:<10}'.format('Show No.') + '{:<25}'.format('Show Name') + '{:<15}'.format('Available Seats'))
             print('-' * 50)
             for i,show in enumerate(self.shows):
                 show.buyTicketsDetails(i)
-
-            showSelected = input("Select show number: ").strip()
+            showSelected = input("Select show number (C to cancel): ").strip()
+            if showSelected == 'c' or showSelected == 'C':
+                print("Booking Cancelled.")
+                return None
             try:
                 showSelected = int(showSelected) - 1
                 if showSelected not in range(0, len(self.shows)):
@@ -32,20 +34,7 @@ class ShowList:
             except:
                 print("Invalid input")
                 return None
-
-            seatsSelected = input("Enter number of seats to book: ").strip()
-            try:
-                seatsSelected = int(seatsSelected)
-            except:
-                print("Invalid input")
-                return None
-
-            if s.shows[showSelected].availableSeats >= seatsSelected:
-                s.shows[showSelected].availableSeats -= seatsSelected
-                print(str(seatsSelected) + " ticket(s) booked successfully for the show " + s.shows[showSelected].name)
-            else:
-                print(str(seatsSelected) + " ticket(s) not available.")
-
+            self.shows[showSelected].buyTickets()
         else:
             print("No shows available.")
 
@@ -54,22 +43,20 @@ class ShowList:
             print('\n' + '{:<10}'.format('Show No.') + '{:<25}'.format('Show Name'))
             print('-' * 35)
             for i,show in enumerate(self.shows):
-                show.delelteShowDetails(i)
+                show.deleteShowDetails(i)
             delete = input("Enter show number to delete (C to cancel): ").strip()
             if delete == 'c' or delete == 'C':
                 print("Delete Cancelled.")
                 return None
-            if type(delete) != int:
-                try:
-                    delete = int(delete) - 1
-                    if delete in range(0, len(self.shows)):
-                        self.shows.pop(delete)
-                        print("Deleted successfully")
-                    else:
-                        print("Invalid input.")
-                except:
+            try:
+                delete = int(delete) - 1
+                if delete in range(0, len(self.shows)):
+                    self.shows.pop(delete)
+                    print("Deleted successfully")
+                else:
                     print("Invalid input.")
-
+            except:
+                print("Invalid input.")
         else:
             print("No shows.")
 
@@ -89,7 +76,18 @@ class Show:
         print('{:<10}'.format(str(i + 1)) + '{:<25}'.format(self.name) + '{:<15}'.format(str(self.availableSeats)))
 
     def buyTickets(self):
-        pass
+        seatsSelected = input("Enter number of seats to book: ").strip()
+        try:
+            seatsSelected = int(seatsSelected)
+        except:
+            print("Invalid input")
+            return None
+
+        if self.availableSeats >= seatsSelected:
+            self.availableSeats -= seatsSelected
+            print(str(seatsSelected) + " ticket(s) booked successfully for the show " + self.name)
+        else:
+            print(str(seatsSelected) + " ticket(s) not available.")
 
     def soldDetails(self):
         print('{:<20}'.format(self.name) + '{:<4}'.format(str(self.capacity - self.availableSeats)))
@@ -116,5 +114,6 @@ while True:
 
     elif action == '5' or action == 'q' or action == 'Q':
         break
+
     else:
         print("\nInvalid input.")
